@@ -1,0 +1,13 @@
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.csprojAssemblyReference.cache
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.AssemblyInfoInputs.cache
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.AssemblyInfo.cs
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Services.deps.json
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Services.dll
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Model.dll
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Model.pdb
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.csproj.CopyComplete
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Services.runtimeconfig.json
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Services.runtimeconfig.dev.json
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\bin\Debug\netcoreapp3.1\CarPooling.Services.pdb
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.dll
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPooling.Services\obj\Debug\netcoreapp3.1\CarPooling.Services.pdb
