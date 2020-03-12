@@ -1,9 +1,6 @@
-﻿using CarPoolingEf.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-
-namespace CarPoolingEf.Models
+namespace CarPoolingWebApi.Models.Client
 {
     public class Ride
     {
@@ -29,6 +26,6 @@ namespace CarPoolingEf.Models
 
         public string ViaPoints { get; set; }
 
-        public RideState Status { get; set; }
+        public RideStatus Status { get; set; }
     }
 }

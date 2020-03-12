@@ -1,23 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarPoolingEf;
-using CarPoolingEf.Models;
+using CarPoolingWebApi.Context;
+using CarPoolingWebApi.Services.Interfaces;
+using CarPoolingWebApi.Services.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using CarPoolingEf.Services.Services;
-using CarPoolingEf.Services.Interfaces;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace CarPoolWebApi
-{
+{ 
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,10 +26,29 @@ namespace CarPoolWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CarPoolingContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:CarPoolWebApiDb"]));
-            services.AddScoped<IUserServices<User>, UserServices>();
-            services.AddScoped<IRideServices, RideServices>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRideService, RideService>();
             services.AddScoped<IBookingService, BookingService>();
-            services.AddScoped<ICarServices, CarServices>();
+            services.AddScoped<ICarService, CarService>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecureKey"))
+                };
+            });
+
             services.AddControllers();
         }
 

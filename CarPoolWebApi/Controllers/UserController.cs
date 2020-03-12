@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿using CarPoolingWebApi.Models.Client;
+using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace CarPoolWebApi.Controllers
 {
-    [Route("api/User/[Action]")]
+    [Route("api/user/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserServices<User> _UserServices;
+        private readonly IUserService _UserService;
 
-        public UserController(IUserServices<User> userServices)
+        public UserController(IUserService userService)
         {
-            _UserServices = userServices;
+            _UserService = userService;
         }
 
+        [Authorize(Roles ="Admin,User")]
         [HttpGet]
-        [ActionName("GetUser")]
+        [ActionName("getuser")]
         public IActionResult GetUser(string id)
         {
-            User user = _UserServices.GetUser(id);
+            User user = _UserService.GetUser(id);
 
             if (user == null)
             {
@@ -37,7 +37,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("NewUser")]
+        [ActionName("newuser")]
         public IActionResult AddNewUser([FromBody] User user)
         {
             if (user == null)
@@ -45,26 +45,28 @@ namespace CarPoolWebApi.Controllers
                 return NoContent();
             }
 
-            _UserServices.AddNewUser(user);
+            _UserService.AddNewUser(user);
             return Ok(user);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpDelete]
-        [ActionName("Delete")]
+        [ActionName("delete")]
         public IActionResult DeleteUser(string id)
         {
-            User user = _UserServices.GetUser(id);
+            User user = _UserService.GetUser(id);
             if (user == null)
             {
                 return NotFound("The Employee record couldn't be found.");
             }
 
-            _UserServices.DeleteUser(id);
+            _UserService.DeleteUser(id);
             return NoContent();
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPut("{id}")]
-        [ActionName("Update")]
+        [ActionName("update")]
         public IActionResult UpdateUser(string id, [FromBody] User user)
         {
             if (user == null)
@@ -72,34 +74,81 @@ namespace CarPoolWebApi.Controllers
                 return BadRequest("Employee is null.");
             }
 
-            User old = _UserServices.GetUser(id);
+            User old = _UserService.GetUser(id);
             if (old == null)
             {
                 return NotFound("The Employee record couldn't be found.");
             }
 
-            _UserServices.UpdateUser(user, id);
+            _UserService.UpdateUser(user, id);
             return NoContent();
         }
 
+        
+        //public IActionResult Authentication2([FromBody] Login login)
+        //{
+        //    //CarPoolingWebApi.Models.Data.User user = _UserService.Authentication(login);
+        //    if (user == null)
+        //    {
+        //        return Unauthorized("UserName Or Password is wrong");
+        //    }
+
+        //    return Ok(user);
+        //}
+
+        [AllowAnonymous]
         [HttpPost]
-        [ActionName("Authenticate")]
+        [ActionName("authenticate")]
         public IActionResult Authentication([FromBody] Login login)
         {
-            User user = _UserServices.Authentication(login);
-            if (user == null)
-            {
-                return Unauthorized("UserName Or Password is wrong");
-            }
+            var user = _UserService.Authentication(login);
 
-            return Ok(user);
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            var key = Convert.FromBase64String(Convert.ToString(Guid.NewGuid()));
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+            SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims: new[] { new Claim(type: ClaimTypes.Name, value: login.UserName) }),
+                Expires = DateTime.UtcNow.AddSeconds(30),
+                SigningCredentials = new SigningCredentials(securityKey, algorithm: SecurityAlgorithms.HmacSha256)
+            };
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken tokenString = handler.CreateJwtSecurityToken(securityToken);
+
+            //var tokenHandler = new JwtSecurityTokenHandler();
+            //var key = Encoding.ASCII.GetBytes("a");
+            //var tokenDescriptor = new SecurityTokenDescriptor
+            //{
+            //    Subject = new ClaimsIdentity(new Claim[]
+            //    {
+            //        new Claim(ClaimTypes.Name, user.Id.ToString())
+            //    }),
+            //    Expires = DateTime.UtcNow.AddDays(7),
+            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            //};
+            //var token = tokenHandler.CreateToken(tokenDescriptor);
+            //var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new
+            {
+                id = user.Id,
+                Username = user.UserName,
+                name = user.Name,
+                address = user.Address,
+                token = tokenString
+            });
         }
+
         
+        [AllowAnonymous]
         [HttpPost]
-        [ActionName("UserNameAvailability")]
+        [ActionName("usernameavailability")]
         public IActionResult UserNameAvailability([FromBody] string userName)
         {
-            if (_UserServices.CheckUserName(userName))
+            if (_UserService.CheckUserName(userName))
             {
                 return BadRequest("This username taken by some use another one");
             }

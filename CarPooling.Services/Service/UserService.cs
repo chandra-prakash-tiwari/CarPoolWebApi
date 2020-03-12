@@ -1,38 +1,34 @@
-﻿using CarPoolingEf;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
+﻿using CarPoolingWebApi.Context;
+using CarPoolingWebApi.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CarPoolingEf.Services.Services
+namespace CarPoolingWebApi.Services.Service
 {
-    public class UserServices : IUserServices<User>
+    public class UserService : IUserService
     {
         private CarPoolingContext Db { get; set; }
 
-        public UserServices(CarPoolingContext context)
+        public UserService(CarPoolingContext context)
         {
             this.Db = context;
         }
 
-        public void AddNewUser(User user)
+        public bool AddNewUser(Models.Client.User user)
         {
             user.Id = Guid.NewGuid().ToString();
-            this.Db.Users.Add(user);
-            this.Db.SaveChanges();
+            var userData = Mapper.Map<Models.Client.User, Models.Data.User>(user);
+            this.Db.Users.Add(userData);
+            return this.Db.SaveChanges() > 0;
         }
 
-        public User Authentication(Login credentials)
+        public Models.Client.User Authentication(Models.Client.Login credentials)
         {
-            User user = this.Db.Users?.FirstOrDefault(a => a.UserName == credentials.UserName && a.Password == credentials.Password);
-
-            if (user != null)
-                return user;
-
-            return null;
+            return Mapper.Map<Models.Data.User, Models.Client.User>(this.Db.Users?.FirstOrDefault(a => a.UserName == credentials.UserName && a.Password == credentials.Password));
         }
 
         public bool DeleteUser(string id)
@@ -41,9 +37,9 @@ namespace CarPoolingEf.Services.Services
             return this.Db.SaveChanges() > 0;
         }
 
-        public bool UpdateUser(User newDetails, string id)
+        public bool UpdateUser(Models.Client.User newDetails, string id)
         {
-            User oldDetails = this.Db?.Users?.FirstOrDefault(a => a.Id == id);
+            Models.Data.User oldDetails = this.Db?.Users?.FirstOrDefault(a => a.Id == id);
             if (oldDetails != null)
             {
                 oldDetails.Name = newDetails.Name;
@@ -56,9 +52,9 @@ namespace CarPoolingEf.Services.Services
             return false;
         }
 
-        public User GetUser(string id)
+        public Models.Client.User GetUser(string id)
         {
-            return this.Db.Users?.FirstOrDefault(a => a.Id == id);
+            return Mapper.Map<Models.Data.User, Models.Client.User>(this.Db.Users?.FirstOrDefault(a => a.Id == id));
         }
 
         public bool CheckUserName(string userName)

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-namespace CarPoolingEf.Models
+﻿
+namespace CarPoolingWebApi.Models.Client
 {
     public class Car
     {

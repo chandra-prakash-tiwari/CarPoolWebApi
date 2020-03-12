@@ -1,13 +1,9 @@
-﻿using CarPoolingEf.Models;
-using System;
+﻿using CarPoolingWebApi.Models.Client;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CarPoolingEf.Services.Interfaces
+namespace CarPoolingWebApi.Services.Interfaces
 {
-    public interface ICarServices
+    public interface ICarService
     {
         bool AddNewCar(Car car,string ownerId);
 

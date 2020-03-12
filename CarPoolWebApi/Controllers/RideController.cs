@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using CarPoolingWebApi.Models.Client;
+using CarPoolingWebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPoolWebApi.Controllers
 {
-    [Route("api/Ride/[Action]")]
+    [Route("api/ride/[action]")]
     [ApiController]
     public class RideController : ControllerBase
     {
-        private readonly IRideServices _RideServices;
+        private readonly IRideService _RideServices;
 
-        public RideController(IRideServices rideServices)
+        public RideController(IRideService rideServices)
         {
             _RideServices = rideServices;
         }
 
+        [Authorize]
         [HttpPost]
         [ActionName("CreateRide")]
         public IActionResult AddNew([FromBody] Ride ride)
@@ -33,6 +30,7 @@ namespace CarPoolWebApi.Controllers
             return Ok("Created Successful");
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPut("{rideId}")]
         [ActionName("CancelRide")]
         public IActionResult CancelRide(string rideId)
@@ -57,6 +55,7 @@ namespace CarPoolWebApi.Controllers
             return Ok("Ride id modified");
         }
 
+        [Authorize]
         [HttpGet("{rideId}")]
         [ActionName("Ride")]
         public IActionResult GetRide(string rideId)
@@ -70,6 +69,7 @@ namespace CarPoolWebApi.Controllers
             return Ok(ride);
         }
 
+        [Authorize]
         [HttpGet("{ownerId}")]
         [ActionName("YourRide")]
         public IActionResult GetOwnerRides(string ownerId)

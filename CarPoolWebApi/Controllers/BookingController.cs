@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using CarPoolingWebApi.Models.Client;
+using CarPoolingWebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPoolWebApi.Controllers
 {
-    [Route("api/Booking/[Action]")]
+    [Authorize]
+    [Route("api/booking/[action]")]
     [ApiController]
     public class BookingController : ControllerBase
     {
@@ -21,7 +18,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("{CreateBooking}")]
+        [ActionName("{create}")]
         public IActionResult CreateBookig([FromBody]Booking booking, string rideId)
         {
             if (booking == null)
@@ -32,7 +29,7 @@ namespace CarPoolWebApi.Controllers
             return Ok("Booking Created Successful");
         }
 
-        [HttpPut("{bookingId}")]
+        [HttpPut("{bookingid}")]
         [ActionName("{cancel_booking}")]
         public IActionResult CancelBooking(string id)
         {
@@ -60,9 +57,9 @@ namespace CarPoolWebApi.Controllers
 
         [HttpGet("{rideId}")]
         [ActionName("{bookings}")]
-        public IActionResult GetAllBooker(string id)
+        public IActionResult GetAllBooker(string rideId)
         {
-            return Ok(_BookingService.GetBooking(id));
+            return Ok(_BookingService.GetBooking(rideId));
         }
 
         [HttpGet("{userId}")]

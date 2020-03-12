@@ -1,11 +1,7 @@
-﻿using CarPoolingEf.Models;
-using System;
+﻿using CarPoolingWebApi.Models.Client;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CarPoolingEf.Services.Interfaces
+namespace CarPoolingWebApi.Services.Interfaces
 {
     public interface IBookingService
     {
@@ -15,7 +11,7 @@ namespace CarPoolingEf.Services.Interfaces
 
         List<Booking> BookingsStatus(string id);
 
-        bool BookingResponse(string id, BookingState status);
+        bool BookingResponse(string id, BookingStatus status);
 
         string GetRequester(string id);
 

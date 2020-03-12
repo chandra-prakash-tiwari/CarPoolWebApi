@@ -1,30 +1,27 @@
-﻿using CarPoolingEf;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
+﻿using CarPoolingWebApi.Context;
+using CarPoolingWebApi.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CarPoolingEf.Services.Services
+namespace CarPoolingWebApi.Services.Service
 {
-    public class CarServices :  ICarServices
+    public class CarService : ICarService
     {
         private CarPoolingContext Db { get; set; }
 
-        public CarServices(CarPoolingContext context) 
+        public CarService(CarPoolingContext context)
         {
             this.Db = context;
         }
 
-        public bool AddNewCar(Car car,string ownerId)
+        public bool AddNewCar(Models.Client.Car car, string ownerId)
         {
             if (ownerId != null)
             {
                 car.Id = Guid.NewGuid().ToString();
                 car.OwnerId = ownerId;
-                this.Db.Cars.Add(car);
+                this.Db.Cars.Add(Mapper.Map<Models.Client.Car, Models.Data.Car>(car));
                 return this.Db.SaveChanges() > 0;
             }
 
@@ -33,19 +30,19 @@ namespace CarPoolingEf.Services.Services
 
         public bool RemoveCar(string id)
         {
-            Car car = this.Db.Cars.FirstOrDefault(a => a.Id == id);
+            Models.Data.Car car = this.Db.Cars.FirstOrDefault(a => a.Id == id);
             this.Db.Cars.Remove(car);
             return this.Db.SaveChanges() > 0;
         }
 
-        public List<Car> GetOwnerCars(string id)
+        public List<Models.Client.Car> GetOwnerCars(string id)
         {
-            return this.Db?.Cars?.Where(a => a.OwnerId == id).Select(a => a).ToList();
+            return Mapper.Map<List<Models.Data.Car>, List<Models.Client.Car>>(this.Db.Cars?.Where(a => a.OwnerId == id).Select(a => a).ToList());
         }
 
-        public Car GetCar(string id)
+        public Models.Client.Car GetCar(string id)
         {
-            return this.Db?.Cars.FirstOrDefault(a => a.Id == id);
+            return Mapper.Map<Models.Data.Car, Models.Client.Car>(this.Db.Cars.FirstOrDefault(a => a.Id == id));
         }
     }
 }

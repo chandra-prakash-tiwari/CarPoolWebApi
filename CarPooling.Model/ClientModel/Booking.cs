@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CarPoolingEf.Models
+namespace CarPoolingWebApi.Models.Client
 {
     public class Booking
     {
@@ -20,7 +20,7 @@ namespace CarPoolingEf.Models
 
         public DateTime TravelDate { get; set; }
 
-        public BookingState Status { get; set; }
+        public BookingStatus Status { get; set; }
     }
 
     public class SearchRideRequest

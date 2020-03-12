@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarPoolingEf.Models;
-using CarPoolingEf.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using CarPoolingWebApi.Models.Client;
+using CarPoolingWebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarPoolWebApi.Controllers
 {
-    [Route("api/Car")]
+    [Authorize]
+    [Route("api/car/[action]")]
     [ApiController]
     public class CarController : ControllerBase
     {
-        private readonly ICarServices _CarServices;
+        private readonly ICarService _CarServices;
 
-        public CarController(ICarServices carServices)
+        public CarController(ICarService carServices)
         {
             _CarServices = carServices;
         }
@@ -33,7 +30,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpDelete("{carId}")]
-        [ActionName("{Remove_car}")]
+        [ActionName("{remove_car}")]
         public IActionResult Remove(string id)
         {
             if (!_CarServices.RemoveCar(id))

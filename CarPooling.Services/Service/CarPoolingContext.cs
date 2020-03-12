@@ -1,8 +1,7 @@
-﻿using CarPoolingEf.Model;
-using CarPoolingEf.Models;
+﻿using CarPoolingWebApi.Models.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarPoolingEf
+namespace CarPoolingWebApi.Context
 {
     public class CarPoolingContext : DbContext
     {
@@ -14,10 +13,13 @@ namespace CarPoolingEf
 
         public DbSet<Car> Cars { get; set; }
 
-        public CarPoolingContext(DbContextOptions options)
-            : base(options)
+        public CarPoolingContext(DbContextOptions options) : base(options)
         {
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Server=SANDEEPINT-PC\MSSQLSERVER1;Database=CarPoolWebApi;Trusted_Connection=True;");
+        //}
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
