@@ -29,6 +29,10 @@ namespace CarPoolingWebApi.Models.Client
         [Required(ErrorMessage = "Please enter driving licence")]
         public string DrivingLicence { get; set; }
 
+        public int Role { get; set; }
+
+        public string Token { get; set; }
+
         public float Rating { get; set; }
     }
 }

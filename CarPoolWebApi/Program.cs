@@ -13,14 +13,7 @@ namespace CarPoolWebApi
     {
         public static void Main(string[] args)
         {
-            try
-            {
                 CreateHostBuilder(args).Build().Run();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

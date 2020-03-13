@@ -1,5 +1,7 @@
 ﻿using CarPoolingWebApi.Context;
 using CarPoolingWebApi.Services.Interfaces;
+using CarPoolWebApi.Helper;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,9 +15,13 @@ namespace CarPoolingWebApi.Services.Service
     {
         private CarPoolingContext Db { get; set; }
 
-        public UserService(CarPoolingContext context)
+
+        private readonly AppSettings _appSettings;
+
+        public UserService(CarPoolingContext context, IOptions<AppSettings> appSettings)
         {
             this.Db = context;
+            _appSettings = appSettings.Value;
         }
 
         public bool AddNewUser(Models.Client.User user)
@@ -28,7 +34,42 @@ namespace CarPoolingWebApi.Services.Service
 
         public Models.Client.User Authentication(Models.Client.Login credentials)
         {
-            return Mapper.Map<Models.Data.User, Models.Client.User>(this.Db.Users?.FirstOrDefault(a => a.UserName == credentials.UserName && a.Password == credentials.Password));
+            Models.Client.User user= Mapper.Map<Models.Data.User, Models.Client.User>(this.Db.Users?.FirstOrDefault(a => a.UserName == credentials.UserName && a.Password == credentials.Password));
+
+            if (user == null)
+                return null;
+
+            var role = "User";
+            switch ((Models.Client.UserType)user.Role)
+            {
+                case Models.Client.UserType.Admin:
+                    role = "Admin";
+                    break;
+
+                case Models.Client.UserType.User:
+                    role = "User";
+                    break;
+
+                default:                    
+                    break;
+            }
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role,role)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            user.Token = tokenHandler.WriteToken(token);
+
+            return user;
         }
 
         public bool DeleteUser(string id)

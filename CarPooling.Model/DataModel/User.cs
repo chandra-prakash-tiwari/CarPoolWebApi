@@ -6,7 +6,7 @@ namespace CarPoolingWebApi.Models.Data
 {
     public class User
     {
-        public string Token;
+        public string Token { get; set; }
 
         public string Id { get; set; }
 
@@ -25,6 +25,8 @@ namespace CarPoolingWebApi.Models.Data
         public string DrivingLicence { get; set; }
 
         public float Rating { get; set; }
+
+        public UserType Role { get; set; }
 
         public ICollection<Ride> Rides { get; set; }
 

@@ -2,16 +2,12 @@
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace CarPoolWebApi.Controllers
 {
-    [Route("api/user/[action]")]
+    [Authorize]
     [ApiController]
+    [Route("api/user/[action]")]   
     public class UserController : ControllerBase
     {
         private readonly IUserService _UserService;
@@ -19,9 +15,9 @@ namespace CarPoolWebApi.Controllers
         public UserController(IUserService userService)
         {
             _UserService = userService;
+
         }
 
-        [Authorize(Roles ="Admin,User")]
         [HttpGet]
         [ActionName("getuser")]
         public IActionResult GetUser(string id)
@@ -49,7 +45,6 @@ namespace CarPoolWebApi.Controllers
             return Ok(user);
         }
 
-        [Authorize(Roles ="Admin")]
         [HttpDelete]
         [ActionName("delete")]
         public IActionResult DeleteUser(string id)
@@ -64,7 +59,6 @@ namespace CarPoolWebApi.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles ="Admin")]
         [HttpPut("{id}")]
         [ActionName("update")]
         public IActionResult UpdateUser(string id, [FromBody] User user)
@@ -84,18 +78,6 @@ namespace CarPoolWebApi.Controllers
             return NoContent();
         }
 
-        
-        //public IActionResult Authentication2([FromBody] Login login)
-        //{
-        //    //CarPoolingWebApi.Models.Data.User user = _UserService.Authentication(login);
-        //    if (user == null)
-        //    {
-        //        return Unauthorized("UserName Or Password is wrong");
-        //    }
-
-        //    return Ok(user);
-        //}
-
         [AllowAnonymous]
         [HttpPost]
         [ActionName("authenticate")]
@@ -103,42 +85,13 @@ namespace CarPoolWebApi.Controllers
         {
             var user = _UserService.Authentication(login);
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            var key = Convert.FromBase64String(Convert.ToString(Guid.NewGuid()));
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
-            SecurityTokenDescriptor securityToken = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims: new[] { new Claim(type: ClaimTypes.Name, value: login.UserName) }),
-                Expires = DateTime.UtcNow.AddSeconds(30),
-                SigningCredentials = new SigningCredentials(securityKey, algorithm: SecurityAlgorithms.HmacSha256)
-            };
-
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken tokenString = handler.CreateJwtSecurityToken(securityToken);
-
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var key = Encoding.ASCII.GetBytes("a");
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(new Claim[]
-            //    {
-            //        new Claim(ClaimTypes.Name, user.Id.ToString())
-            //    }),
-            //    Expires = DateTime.UtcNow.AddDays(7),
-            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            //};
-            //var token = tokenHandler.CreateToken(tokenDescriptor);
-            //var tokenString = tokenHandler.WriteToken(token);
-
             return Ok(new
             {
                 id = user.Id,
                 Username = user.UserName,
                 name = user.Name,
                 address = user.Address,
-                token = tokenString
+                userToken = user.Token
             });
         }
 

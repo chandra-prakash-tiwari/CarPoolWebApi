@@ -1,6 +1,7 @@
 using CarPoolingWebApi.Context;
 using CarPoolingWebApi.Services.Interfaces;
 using CarPoolingWebApi.Services.Service;
+using CarPoolWebApi.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,11 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
 
 namespace CarPoolWebApi
-{ 
+{
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -25,31 +25,39 @@ namespace CarPoolWebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+            services.AddControllers();
             services.AddDbContext<CarPoolingContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:CarPoolWebApiDb"]));
-            services.AddScoped<IUserService, UserService>();
+            
             services.AddScoped<IRideService, RideService>();
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IUserService, UserService>();
 
-            services.AddAuthentication(options =>
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSetting = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSetting.Secret);
+
+            services.AddAuthentication(x =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddJwtBearer(x =>
             {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecureKey"))
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
                 };
             });
-
-            services.AddControllers();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,8 +70,10 @@ namespace CarPoolWebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseAuthentication();
+
+
 
             app.UseEndpoints(endpoints =>
             {
