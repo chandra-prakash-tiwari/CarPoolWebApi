@@ -2,7 +2,6 @@
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace CarPoolWebApi.Controllers
 {

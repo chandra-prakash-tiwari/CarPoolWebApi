@@ -2,7 +2,6 @@
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace CarPoolWebApi.Controllers
 {
@@ -19,7 +18,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateRide")]
+        [ActionName("createride")]
         public IActionResult AddNew([FromBody] Ride ride)
         {
             if (ride == null)
@@ -33,7 +32,7 @@ namespace CarPoolWebApi.Controllers
 
         [Authorize(Roles ="Admin")]
         [HttpPut]
-        [ActionName("CancelRide")]
+        [ActionName("cancelride")]
         public IActionResult CancelRide(string rideId)
         {
             if (!_RideServices.CancelRide(rideId))
@@ -45,7 +44,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPut]
-        [ActionName("Modify")]
+        [ActionName("modify")]
         public IActionResult Update([FromBody] Ride ride,string id)
         {
             if (ride == null)
@@ -57,7 +56,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpGet]
-        [ActionName("Ride")]
+        [ActionName("ride")]
         public IActionResult GetRide(string rideId)
         {
             Ride ride = _RideServices.GetRide(rideId);
@@ -70,7 +69,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpGet]
-        [ActionName("YourRide")]
+        [ActionName("yourride")]
         public IActionResult GetOwnerRides(string ownerId)
         {
             return Ok(_RideServices.GetRides(ownerId));

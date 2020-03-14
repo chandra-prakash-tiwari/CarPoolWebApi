@@ -1,5 +1,4 @@
-﻿
-namespace CarPoolingWebApi.Models.Client
+﻿namespace CarPoolingWebApi.Models.Client
 {
     public class Point
     {

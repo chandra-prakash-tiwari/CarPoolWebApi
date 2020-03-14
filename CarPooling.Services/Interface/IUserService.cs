@@ -1,5 +1,4 @@
 ﻿using CarPoolingWebApi.Models.Client;
-using System.Collections.Generic;
 
 namespace CarPoolingWebApi.Services.Interfaces
 {

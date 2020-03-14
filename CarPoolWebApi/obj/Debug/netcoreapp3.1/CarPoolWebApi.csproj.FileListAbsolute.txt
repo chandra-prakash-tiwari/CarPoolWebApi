@@ -1,6 +1,5 @@
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\CarPoolWebApi.exe
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\obj\Debug\netcoreapp3.1\CarPoolWebApi.csprojAssemblyReference.cache
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\obj\Debug\netcoreapp3.1\staticwebassets\CarPoolWebApi.StaticWebAssets.Manifest.cache
@@ -133,9 +132,10 @@ C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\S
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.Owin.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.Owin.Security.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Microsoft.Owin.Security.OAuth.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\Owin.dll
-C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\bin\Debug\netcoreapp3.1\AutoMapper.dll
 C:\Users\chandra.t\Desktop\CarPoolWebApi\CarPoolWebApi\obj\Debug\netcoreapp3.1\CarPoolWebApi.MvcApplicationPartsAssemblyInfo.cache
