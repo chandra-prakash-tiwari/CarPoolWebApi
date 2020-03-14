@@ -45,7 +45,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPut]
-        [ActionName("{Modify}")]
+        [ActionName("Modify")]
         public IActionResult Update([FromBody] Ride ride,string id)
         {
             if (ride == null)
@@ -81,11 +81,7 @@ namespace CarPoolWebApi.Controllers
         [ActionName("searchride")]
         public IActionResult GetRidesOffers(SearchRideRequest booking)
         {
-            List<Ride> rides = _RideServices.GetRidesOffers(booking);
-            if (rides == null)
-                return NoContent();
-
-            return Ok(rides);
+            return Ok(_RideServices.GetRidesOffers(booking));
         }
 
     }

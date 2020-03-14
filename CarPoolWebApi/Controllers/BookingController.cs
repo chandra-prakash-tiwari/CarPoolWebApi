@@ -20,7 +20,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("{create}")]
+        [ActionName("{createbooking}")]
         public IActionResult CreateBookig([FromBody]Booking booking, string rideId)
         {
             if (booking == null)
@@ -32,7 +32,7 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPut]
-        [ActionName("{cancel_booking}")]
+        [ActionName("{cancelbooking}")]
         public IActionResult CancelBooking(string id)
         {
             if (!_BookingService.CancelRideRequest(id))
@@ -47,82 +47,49 @@ namespace CarPoolWebApi.Controllers
         [ActionName("{booking}")]
         public IActionResult UserBooking(string ownerId)
         {
-            List<Booking> bookings = _BookingService.BookingsStatus(ownerId);
-
-            if (bookings.Any())
-            return Ok();
-
-            return NoContent();
+            return Ok(_BookingService.BookingsStatus(ownerId));
         }
 
         [HttpGet]
         [ActionName("{requester}")]
         public IActionResult Requester(string id)
         {
-            string requester = _BookingService.GetRequester(id);
-            if (requester == null)
-                return NoContent();
-
-            return Ok(requester);
+            return Ok(_BookingService.GetRequester(id));
         }
 
         [HttpGet]
         [ActionName("{viewbookers}")]
         public IActionResult GetAllBookers(string rideId)
         {
-            Booking Booking = _BookingService.GetBooking(rideId);
-            if (Booking == null)
-                return NoContent();
-
-            return Ok(Booking);
+            return Ok(_BookingService.GetBooking(rideId));
         }
 
         [HttpGet]
-        [ActionName("user_booking")]
+        [ActionName("userbooking")]
         public IActionResult GetUserBookings(string userId)
         {
-            List<Booking> bookings = _BookingService.GetUserBookings(userId);
-
-            if(bookings.Any())
-            return Ok(bookings);
-
-            return NoContent();
+            return Ok(_BookingService.GetUserBookings(userId));
         }
 
         [HttpGet]
-        [ActionName("pending_bookings")]
+        [ActionName("pendingbookings")]
         public IActionResult GetPendingBookings(string rideId)
         {
-            List<Booking> bookings = _BookingService.GetPendingBookings(rideId);
-
-            if (bookings.Any())
-                return Ok(bookings);
-
-            return NoContent();
+                return Ok(_BookingService.GetPendingBookings(rideId));
         }
 
         [HttpGet]
         [ActionName("booking")]
         public IActionResult GetBooking(string bookigId)
         {
-            Booking booking = _BookingService.GetBooking(bookigId);
-
-            if (booking == null)
-                return NoContent();
-
-            return Ok();
+            return Ok(_BookingService.GetBooking(bookigId));
         }
 
         [HttpGet]
         [ActionName("allbookings")]
         public IActionResult GetBooing(string rideId)
         {
-            List<Booking> bookings = _BookingService.GetBookings(rideId);
-
-            if (bookings.Any())
-                return Ok(bookings);
-
-            return NoContent();
+                return Ok(_BookingService.GetBookings(rideId));
         }
     }
 }
