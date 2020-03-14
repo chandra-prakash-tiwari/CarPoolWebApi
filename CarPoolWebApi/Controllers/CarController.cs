@@ -17,7 +17,7 @@ namespace CarPoolWebApi.Controllers
             _CarServices = carServices;
         }
 
-        [HttpPost("{ownerId}")]
+        [HttpPost]
         [ActionName("{add_new_car}")]
         public IActionResult NewCar([FromBody] Car car,string ownerId)
         {
@@ -29,7 +29,7 @@ namespace CarPoolWebApi.Controllers
             return Ok("Car adding successful");
         }
 
-        [HttpDelete("{carId}")]
+        [HttpDelete]
         [ActionName("{remove_car}")]
         public IActionResult Remove(string id)
         {
@@ -38,14 +38,14 @@ namespace CarPoolWebApi.Controllers
             return Ok();
         }
 
-        [HttpGet("{ownerId}")]
+        [HttpGet]
         [ActionName("{cars}")]
-        public IActionResult GetCars(string ownerId)
+        public IActionResult GetOwnerCars(string ownerId)
         {
             return Ok(_CarServices.GetOwnerCars(ownerId));
         }
 
-        [HttpGet("{carId}")]
+        [HttpGet]
         [ActionName("{car}")]
         public IActionResult Car(string carId)
         {

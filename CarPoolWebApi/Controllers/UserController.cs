@@ -2,12 +2,13 @@
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace CarPoolWebApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/user/[action]")]   
+    [Route("api/user/[action]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _UserService;
@@ -33,7 +34,6 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("newuser")]
         public IActionResult AddNewUser([FromBody] User user)
         {
             if (user == null)
@@ -45,6 +45,7 @@ namespace CarPoolWebApi.Controllers
             return Ok(user);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpDelete]
         [ActionName("delete")]
         public IActionResult DeleteUser(string id)
@@ -59,7 +60,7 @@ namespace CarPoolWebApi.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [ActionName("update")]
         public IActionResult UpdateUser(string id, [FromBody] User user)
         {
@@ -94,7 +95,6 @@ namespace CarPoolWebApi.Controllers
                 userToken = user.Token
             });
         }
-
         
         [AllowAnonymous]
         [HttpPost]

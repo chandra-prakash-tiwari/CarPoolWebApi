@@ -19,7 +19,7 @@ namespace CarPoolingWebApi.Services.Interfaces
 
         List<Booking> GetBookings(string rideId);
 
-        List<Booking> GetAllPendingBookings(string rideId);
+        List<Booking> GetPendingBookings(string rideId);
 
         Booking GetBooking(string bookingId);
     }

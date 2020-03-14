@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarPoolingWebApi.Models.Client
 {
@@ -25,10 +26,13 @@ namespace CarPoolingWebApi.Models.Client
 
     public class SearchRideRequest
     {
+        [Required(ErrorMessage = "Please enter source city name")]
         public string From { get; set; }
 
+        [Required(ErrorMessage = "Please enter destination city name")]
         public string To { get; set; }
 
+        [Required(ErrorMessage = "Please enter date")]
         public DateTime TravelDate { get; set; }
     }
 }

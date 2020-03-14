@@ -69,7 +69,7 @@ namespace CarPoolingWebApi.Services.Service
             return Mapper.Map<List<Models.Data.Booking>, List<Models.Client.Booking>>(this.Db.Bookings?.Where(booking => booking.RideId == rideId).ToList());
         }
 
-        public List<Models.Client.Booking> GetAllPendingBookings(string rideId)
+        public List<Models.Client.Booking> GetPendingBookings(string rideId)
         {
             return Mapper.Map<List<Models.Data.Booking>, List<Models.Client.Booking>>(this.Db.Bookings?.Where(booking => booking.Status == Models.Client.BookingStatus.Pending && booking.RideId == rideId).ToList());
         }
