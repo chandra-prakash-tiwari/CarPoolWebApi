@@ -9,7 +9,7 @@ namespace CarPoolingWebApi.Services.Interfaces
 
         bool RemoveCar(string id);
 
-        List<Car> GetOwnerCars(string id);
+        IEnumerable<Car> GetOwnerCars(string id);
 
         Car GetCar(string id);
     }

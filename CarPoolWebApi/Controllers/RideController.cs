@@ -1,4 +1,4 @@
-﻿using CarPoolingWebApi.Models.Client;
+﻿ using CarPoolingWebApi.Models.Client;
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +27,7 @@ namespace CarPoolWebApi.Controllers
             }
             _RideServices.CreateRide(ride);
 
-            return Ok("Created Successful");
+            return Ok(Constant.RideCreated);
         }
 
         [Authorize(Roles ="Admin")]
@@ -40,7 +40,7 @@ namespace CarPoolWebApi.Controllers
                 return NoContent();
             }
 
-            return Ok("Your ride is cancelled");
+            return Ok(Constant.RideCancelled);
         }
 
         [HttpPut]
@@ -52,7 +52,7 @@ namespace CarPoolWebApi.Controllers
                 return NoContent();
             }
             _RideServices.ModifyRide(ride, id);
-            return Ok("Ride id modified");
+            return Ok(Constant.RideModified);
         }
 
         [HttpGet]
@@ -62,7 +62,7 @@ namespace CarPoolWebApi.Controllers
             Ride ride = _RideServices.GetRide(rideId);
             if (ride == null)
             {
-                return NotFound("No ride found");
+                return NotFound(Constant.NoRide);
             }
 
             return Ok(ride);

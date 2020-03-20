@@ -2,6 +2,7 @@
 using CarPoolingWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace CarPoolWebApi.Controllers
 {
@@ -25,8 +26,9 @@ namespace CarPoolWebApi.Controllers
             {
                 return BadRequest();
             }
-            _CarServices.AddNewCar(car,ownerId);
-            return Ok("Car adding successful");
+            if (!_CarServices.AddNewCar(car, ownerId))
+                return BadRequest(Constant.EmptyOwnerId);
+            return Ok(Constant.CarAdded);
         }
 
         [HttpDelete]
@@ -42,7 +44,9 @@ namespace CarPoolWebApi.Controllers
         [ActionName("cars")]
         public IActionResult GetOwnerCars(string ownerId)
         {
-            return Ok(_CarServices.GetOwnerCars(ownerId));
+            IEnumerable<Car> cars = _CarServices.GetOwnerCars(ownerId);
+
+            return Ok(cars);
         }
 
         [HttpGet]

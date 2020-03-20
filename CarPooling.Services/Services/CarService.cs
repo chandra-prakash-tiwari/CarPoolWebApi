@@ -35,9 +35,9 @@ namespace CarPoolingWebApi.Services.Service
             return this.Db.SaveChanges() > 0;
         }
 
-        public List<Models.Client.Car> GetOwnerCars(string id)
+        public IEnumerable<Models.Client.Car> GetOwnerCars(string id)
         {
-            return Mapper.Map<List<Models.Data.Car>, List<Models.Client.Car>>(this.Db.Cars?.Where(a => a.OwnerId == id).Select(a => a).ToList());
+            return Mapper.Map<List<Models.Data.Car>, List<Models.Client.Car>>(this.Db.Cars?.Where(a => a.OwnerId == id).Select(a => a).ToList()).AsEnumerable();
         }
 
         public Models.Client.Car GetCar(string id)

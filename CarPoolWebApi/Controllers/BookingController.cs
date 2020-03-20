@@ -18,45 +18,45 @@ namespace CarPoolWebApi.Controllers
         }
 
         [HttpPost]
-        [ActionName("{createbooking}")]
+        [ActionName("createbooking")]
         public IActionResult CreateBookig([FromBody]Booking booking, string rideId)
         {
             if (booking == null)
             {
-                return BadRequest("Booking null is not accepted");
+                return BadRequest(Constant.NullBooking);
             }
             _BookingService.CreateBooking(booking, rideId);
-            return Ok("Booking Created Successful");
+            return Ok(Constant.BookingCreated);
         }
 
         [HttpPut]
-        [ActionName("{cancelbooking}")]
+        [ActionName("cancelbooking")]
         public IActionResult CancelBooking(string id)
         {
             if (!_BookingService.CancelRideRequest(id))
             {
-                return BadRequest("No any booking found");
+                return BadRequest(Constant.BookingNotFound);
             }
 
             return Ok(_BookingService.GetBooking(id));
         }
 
         [HttpGet()]
-        [ActionName("{booking}")]
+        [ActionName("booking")]
         public IActionResult UserBooking(string ownerId)
         {
             return Ok(_BookingService.BookingsStatus(ownerId));
         }
 
         [HttpGet]
-        [ActionName("{requester}")]
+        [ActionName("requester")]
         public IActionResult Requester(string id)
         {
             return Ok(_BookingService.GetRequester(id));
         }
 
         [HttpGet]
-        [ActionName("{viewbookers}")]
+        [ActionName("viewbookers")]
         public IActionResult GetAllBookers(string rideId)
         {
             return Ok(_BookingService.GetBooking(rideId));

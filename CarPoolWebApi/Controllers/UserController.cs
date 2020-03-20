@@ -26,13 +26,14 @@ namespace CarPoolWebApi.Controllers
 
             if (user == null)
             {
-                return NotFound("The Employee record couldn't be found.");
+                return NotFound(Constant.UserNotFound);
             }
 
             return Ok(user);
         }
 
         [HttpPost]
+        [ActionName("addnewuser")]
         public IActionResult AddNewUser([FromBody] User user)
         {
             if (user == null)
@@ -52,7 +53,7 @@ namespace CarPoolWebApi.Controllers
             User user = _UserService.GetUser(id);
             if (user == null)
             {
-                return NotFound("The Employee record couldn't be found.");
+                return NotFound(Constant.UserNotFound);
             }
 
             _UserService.DeleteUser(id);
@@ -65,13 +66,13 @@ namespace CarPoolWebApi.Controllers
         {
             if (user == null)
             {
-                return BadRequest("Employee is null.");
+                return BadRequest(Constant.NullUser);
             }
 
             User old = _UserService.GetUser(id);
             if (old == null)
             {
-                return NotFound("The Employee record couldn't be found.");
+                return NotFound(Constant.UserNotFound);
             }
 
             _UserService.UpdateUser(user, id);
@@ -84,6 +85,9 @@ namespace CarPoolWebApi.Controllers
         public IActionResult Authentication([FromBody] Login login)
         {
             var user = _UserService.Authentication(login);
+
+            if (user == null)
+                return BadRequest();
 
             return Ok(new
             {
@@ -98,11 +102,11 @@ namespace CarPoolWebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ActionName("usernameavailability")]
-        public IActionResult UserNameAvailability([FromBody] string userName)
+        public IActionResult UserNameAvailability(string userName)
         {
             if (_UserService.CheckUserName(userName))
             {
-                return BadRequest("This username taken by some use another one");
+                return BadRequest(Constant.UserNameNotAvailable);
             }
             return Ok();
         }
